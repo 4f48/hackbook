@@ -6,5 +6,5 @@ services:
       - 5432:5432
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: xKCcm3wvS2moMpHOFee9Cs1G
+      POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: local

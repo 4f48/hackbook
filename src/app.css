@@ -1,3 +1,25 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+h1 {
+	font-size: 28px;
+}
+
+h2 {
+	font-size: 24px;
+}
+
+h3 {
+	font-size: 20px;
+}
+
+a {
+	color: blue;
+	text-decoration: underline;
+}
+
+button {
+	border: 1px solid black;
+	padding: 8px;
+}
