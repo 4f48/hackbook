@@ -33,15 +33,16 @@ export const actions = {
 			});
 		if (!user) return { success: false, error: 'wrong email or password' };
 
-		if (!argon2.verify(user.password, password.toString()))
+		if (!argon2.verify(user.password, password.toString())) {
 			return { success: false, error: 'wrong email or password' };
+		}
 
 		const session = await createSession(user.id);
 		cookies.set('session', session, {
 			path: '/',
 			maxAge: 60 * 60 * 24 * 7 // 7d
 		});
-		redirect(303, '/settings');
+		redirect(303, '/feed');
 	}
 } satisfies Actions;
 

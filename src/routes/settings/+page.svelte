@@ -6,6 +6,7 @@
 </script>
 
 <h1>Hello, {data.user?.name}</h1>
+<a href="/feed">go to your feed</a>
 <p>{data.user?.email}</p>
 <form method="POST" use:enhance>
 	<button type="submit">Log Out</button>

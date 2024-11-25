@@ -1,7 +1,7 @@
-import { redirect, type Handle } from '@sveltejs/kit';
+import { type Handle, redirect } from '@sveltejs/kit';
 import { COOKIE_NAME, verifySession } from '$lib/server/session';
 
-const PROTECTED_ROUTES = ['/settings'];
+const PROTECTED_ROUTES = ['/settings', '/feed', '/new'];
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const sessionCookie = event.cookies.get(COOKIE_NAME);
