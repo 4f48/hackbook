@@ -1,1 +1,12 @@
-<h1>settings</h1>
+<script lang="ts">
+	import type { PageData } from './$types';
+	import { enhance } from '$app/forms';
+
+	let { data }: { data: PageData } = $props();
+</script>
+
+<h1>Hello, {data.user?.name}</h1>
+<p>{data.user?.email}</p>
+<form method="POST" use:enhance>
+	<button type="submit">Log Out</button>
+</form>

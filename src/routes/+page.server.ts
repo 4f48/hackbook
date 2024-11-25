@@ -3,9 +3,11 @@ import { eq } from 'drizzle-orm';
 import type { Actions } from './$types';
 import argon2 from 'argon2';
 import { users } from '$lib/server/db/schema';
+import { createSession } from '$lib/server/session';
+import { redirect } from '@sveltejs/kit';
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const email = data.get('email');
 		const password = data.get('password');
@@ -34,7 +36,12 @@ export const actions = {
 		if (!argon2.verify(user.password, password.toString()))
 			return { success: false, error: 'wrong email or password' };
 
-		return { success: true, error: null };
+		const session = await createSession(user.id);
+		cookies.set('session', session, {
+			path: '/',
+			maxAge: 60 * 60 * 24 * 7 // 7d
+		});
+		redirect(303, '/settings');
 	}
 } satisfies Actions;
 

@@ -9,17 +9,19 @@
 	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 
-	const postSignup = $page.url.searchParams.has("post_signup");
-	const unauthenticated = $page.url.searchParams.has("unauthenticated");
+	const postSignup = $page.url.searchParams.has('post_signup');
+	const unauthenticated = $page.url.searchParams.has('unauthenticated');
+	const loggedOut = $page.url.searchParams.has('logged_out');
 
 	let visible = $state(false);
 	let progress = tweened(100);
 
-	if (postSignup || unauthenticated) {
+	if (postSignup || unauthenticated || loggedOut) {
 		onMount(() => {
 			const params = new URLSearchParams($page.url.searchParams);
 			if (postSignup) params.delete('post_signup');
 			if (unauthenticated) params.delete('unauthenticated');
+			if (loggedOut) params.delete('logged_out');
 			goto(`?${params}`);
 
 			visible = true;
@@ -59,6 +61,9 @@
 		{/if}
 		{#if unauthenticated}
 			Please log in before visiting that page.
+		{/if}
+		{#if loggedOut}
+			Successfully logged out.
 		{/if}
 		<div class="absolute bottom-0 left-0 h-1 bg-black" style="width: {$progress}%"></div>
 	</div>
