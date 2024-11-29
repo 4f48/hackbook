@@ -4,13 +4,11 @@
 	const { data }: { data: PageData } = $props();
 </script>
 
-<h1>What's hackin'</h1>
-<a href="/settings">user settings</a>
-<a href="/new">post something</a>
+<h1>User: {data.user?.name}</h1>
 <main class="flex w-full flex-col items-center gap-3">
-	{#each data.results as post}
+	{#each data.userPosts as post}
 		<div class="flex w-[50%] flex-col content-center gap-3 border border-black p-3">
-			<a href="/user/{post.authorId}">{post.author}</a>
+			<a href="/user/{data.user?.id}">{data.user?.name}</a>
 			<a href="/post/{post.id}">{post.content}</a>
 			{#if post.picture}
 				<img class="border border-black" src={post.picture} alt="post pic" />

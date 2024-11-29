@@ -17,9 +17,28 @@ export const posts = pgTable('posts', {
 	date: date('date').notNull().defaultNow()
 });
 
+export const comments = pgTable('comments', {
+	id: uuid('id').primaryKey().defaultRandom(),
+	postId: uuid('postId').notNull(),
+	authorId: uuid('authorId').notNull(),
+	content: text('content').notNull(),
+	date: date('date').notNull().defaultNow()
+});
+
 export const postsRelations = relations(posts, ({ one }) => ({
 	author: one(users, {
 		fields: [posts.author],
 		references: [users.id]
+	})
+}));
+
+export const commentsRelations = relations(comments, ({ one }) => ({
+	author: one(users, {
+		fields: [comments.authorId],
+		references: [users.id]
+	}),
+	post: one(posts, {
+		fields: [comments.postId],
+		references: [posts.id]
 	})
 }));

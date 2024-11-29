@@ -1,0 +1,151 @@
+{
+	"id": "618ffc50-20de-4c4a-9b58-fc9a4e9ec963",
+	"prevId": "7e3747d6-5fe5-4007-93d0-ca5d7f53cb29",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"public.comments": {
+			"name": "comments",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"postId": {
+					"name": "postId",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"authorId": {
+					"name": "authorId",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"content": {
+					"name": "content",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"date": {
+					"name": "date",
+					"type": "date",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"public.posts": {
+			"name": "posts",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"author": {
+					"name": "author",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"content": {
+					"name": "content",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"picture": {
+					"name": "picture",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"date": {
+					"name": "date",
+					"type": "date",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"public.users": {
+			"name": "users",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"avatar": {
+					"name": "avatar",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"email": {
+					"name": "email",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"password": {
+					"name": "password",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"users_email_unique": {
+					"name": "users_email_unique",
+					"nullsNotDistinct": false,
+					"columns": ["email"]
+				},
+				"users_name_unique": {
+					"name": "users_name_unique",
+					"nullsNotDistinct": false,
+					"columns": ["name"]
+				}
+			}
+		}
+	},
+	"enums": {},
+	"schemas": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
+}
