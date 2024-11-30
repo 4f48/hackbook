@@ -22,6 +22,7 @@ export const actions = {
 		});
 	}
 } satisfies Actions;
+
 export const load: PageServerLoad = async ({ params }) => {
 	try {
 		const [post] = await db
