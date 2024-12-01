@@ -2,7 +2,7 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { users } from '$lib/server/db/schema';
-import { ilike, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 
 export const actions = {
 	default: async ({ request }) => {
@@ -14,14 +14,14 @@ export const actions = {
 } satisfies Actions;
 
 export const load: PageServerLoad = async ({ url }) => {
-	const search = url.searchParams.get("search");
+	const search = url.searchParams.get('search');
 	const results = await db.query.users.findMany({
 		where: sql`to_tsvector('english', ${users.name}) @@ websearch_to_tsquery('english', ${search})`,
 		columns: {
 			password: false,
-			email: false,
+			email: false
 		},
-		limit: 20,
+		limit: 20
 	});
 	console.debug(results);
 	return { results, search };

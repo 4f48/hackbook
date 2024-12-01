@@ -12,7 +12,7 @@
 		<div class="flex w-[50%] flex-col content-center gap-3 border border-black p-3">
 			<a href="/user/{post.author.id}">{post.author.name}</a>
 			<a href="/post/{post.post.id}">{post.post.content}</a>
-			{#if post.picture}
+			{#if post.post.picture}
 				<img class="border border-black" src={post.post.picture} alt="post pic" />
 			{/if}
 		</div>
