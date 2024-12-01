@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 import { follows, posts, users } from '$lib/server/db/schema';
@@ -58,7 +58,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 			.from(posts)
 			.leftJoin(users, eq(posts.author, users.id))
 			.where(eq(posts.author, params.slug))
-			.orderBy(posts.date);
+			.orderBy(desc(posts.date));
 		const followExists = await db.query.follows.findFirst({
 			where: and(eq(follows.followerId, you), eq(follows.followedId, user!.id))
 		});

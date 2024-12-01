@@ -1,18 +1,19 @@
 import { db } from '$lib/server/db';
-import { posts, users } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { follows, posts, users } from '$lib/server/db/schema';
+import { desc, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
 	const results = await db
 		.select({
-			id: posts.id,
-			content: posts.content,
-			picture: posts.picture,
-			author: users.name,
-			authorId: users.id
+			post: posts,
+			author: users
 		})
 		.from(posts)
-		.leftJoin(users, eq(posts.author, users.id));
+		.innerJoin(users, eq(posts.author, users.id))
+		.innerJoin(follows, eq(follows.followedId, posts.author))
+		.where(eq(follows.followerId, locals.uuid))
+		.orderBy(desc(posts.date));
+
 	return { results };
 };
