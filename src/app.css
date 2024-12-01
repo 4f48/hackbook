@@ -2,6 +2,25 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@layer base {
+	@font-face {
+		font-family: 'Inter';
+		font-display: swap;
+		src: url(/InterVariable.woff2) format('woff2');
+	}
+	:root {
+		--bg: 52.94 73.91% 90.98%;
+		--fg: 0 0% 15.69%;
+		--accent: 2.4 75.11% 45.69%;
+	}
+	.dark {
+		--bg: 195 6.45% 12.16%;
+		--fg: 48.46 86.67% 88.24%;
+		--accent: 2.4 75.11% 45.69%;
+	}
+}
+
+,
 h1 {
 	font-size: 28px;
 }
@@ -17,9 +36,4 @@ h3 {
 a {
 	color: blue;
 	text-decoration: underline;
-}
-
-button {
-	border: 1px solid black;
-	padding: 8px;
 }

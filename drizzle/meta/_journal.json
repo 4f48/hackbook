@@ -43,6 +43,13 @@
 			"when": 1733008398027,
 			"tag": "0005_past_dark_beast",
 			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1733072760788,
+			"tag": "0006_wooden_ben_parker",
+			"breakpoints": true
 		}
 	]
 }

@@ -27,10 +27,13 @@ export const load: PageServerLoad = async ({ params }) => {
 	try {
 		const [post] = await db
 			.select({
+				id: posts.id,
 				content: posts.content,
 				picture: posts.picture,
 				author: users.name,
-				authorId: users.id
+				authorId: users.id,
+				avatar: users.avatar,
+				date: posts.date
 			})
 			.from(posts)
 			.leftJoin(users, eq(posts.author, users.id))
@@ -41,7 +44,9 @@ export const load: PageServerLoad = async ({ params }) => {
 			.select({
 				content: comments.content,
 				author: users.name,
-				authorId: comments.authorId
+				authorId: comments.authorId,
+				authorAvatar: users.avatar,
+				date: comments.date
 			})
 			.from(comments)
 			.leftJoin(users, eq(users.id, comments.authorId))
