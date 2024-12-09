@@ -13,14 +13,14 @@
 	<div class="flex w-[50%] flex-col gap-3">
 		<article class="mb-2">
 			<Post
-				avatar={data.post.avatar as string | undefined}
-				content={data.post.content}
-				date={data.post.date}
+				avatar={data.post?.author.avatar as string | undefined}
+				content={data.post?.content!}
+				date={data.post?.date!}
 				href={$page.url.href}
 				index="0"
-				picture={data.post.picture as string | undefined}
-				userId={data.post.authorId!}
-				username={data.post.author!}
+				picture={data.post?.picture!}
+				userId={data.post?.author.id!}
+				username={data.post?.author.name!}
 			/>
 		</article>
 		<form method="POST" use:enhance class="flex gap-1">
@@ -32,13 +32,13 @@
 		<div class="flex flex-col gap-1">
 			{#each data.postComments as comment, index}
 				<Post
-					avatar={comment.authorAvatar!}
+					avatar={comment.author.avatar!}
 					content={comment.content}
 					date={comment.date}
 					href={$page.url.href!}
 					index={(index + 1).toString()}
 					userId={comment.authorId}
-					username={comment.author!}
+					username={comment.author.name!}
 				/>
 			{/each}
 		</div>

@@ -1,8 +1,8 @@
 import { db } from '$lib/server/db';
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import { comments, posts, users } from '$lib/server/db/schema';
+import { comments, posts } from '$lib/server/db/schema';
 import type { Actions } from '@sveltejs/kit';
 
 export const actions = {
@@ -25,32 +25,36 @@ export const actions = {
 
 export const load: PageServerLoad = async ({ params }) => {
 	try {
-		const [post] = await db
-			.select({
-				id: posts.id,
-				content: posts.content,
-				picture: posts.picture,
-				author: users.name,
-				authorId: users.id,
-				avatar: users.avatar,
-				date: posts.date
-			})
-			.from(posts)
-			.leftJoin(users, eq(posts.author, users.id))
-			.where(eq(posts.id, params.slug))
-			.limit(1);
+		const post = await db.query.posts.findFirst({
+			with: {
+				author: {
+					columns: {
+						avatar: true,
+						id: true,
+						name: true
+					}
+				}
+			},
+			where: eq(posts.id, params.slug)
+		});
 
-		const postComments = await db
-			.select({
-				content: comments.content,
-				author: users.name,
-				authorId: comments.authorId,
-				authorAvatar: users.avatar,
-				date: comments.date
-			})
-			.from(comments)
-			.leftJoin(users, eq(users.id, comments.authorId))
-			.where(eq(comments.postId, params.slug));
+		const postComments = await db.query.comments.findMany({
+			columns: {
+				content: true,
+				authorId: true,
+				date: true
+			},
+			orderBy: desc(comments.date),
+			where: eq(comments.postId, params.slug),
+			with: {
+				author: {
+					columns: {
+						avatar: true,
+						name: true
+					}
+				}
+			}
+		});
 
 		return { post, postComments };
 	} catch {

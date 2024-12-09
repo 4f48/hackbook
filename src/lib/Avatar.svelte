@@ -16,9 +16,9 @@
 
 <a href="/user/{id}" class="no-underline duration-200 hover:brightness-110">
 	{#if avatar}
-		<img class="h-10 w-10 rounded-full" src={avatar} alt="{name}'s avatar" />
+		<img class="h-full w-full rounded-full" src={avatar} alt="{name}'s avatar" />
 	{:else}
-		<div class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-300">
+		<div class="flex h-full w-full items-center justify-center rounded-full bg-orange-300">
 			<span class="font-bold text-orange-50">{initials}</span>
 		</div>
 	{/if}
