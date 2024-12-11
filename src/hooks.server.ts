@@ -1,7 +1,7 @@
 import { type Handle, redirect } from '@sveltejs/kit';
 import { COOKIE_NAME, verifySession } from '$lib/server/session';
 
-const PROTECTED_ROUTES = ['/settings', '/feed', '/new', '/user/*', '/post*'];
+const PROTECTED_ROUTES = ['/settings', '/feed', '/new', '/user/*', '/post/*', '/search'];
 const UNAUTHENTICATED_ONLY = ['/', '/signup'];
 
 export const handle: Handle = async ({ event, resolve }) => {

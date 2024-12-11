@@ -13,14 +13,14 @@
 	<div class="flex w-[50%] flex-col gap-3">
 		<article class="mb-2">
 			<Post
-				avatar={data.post?.author.avatar as string | undefined}
-				content={data.post?.content!}
-				date={data.post?.date!}
+				avatar={data.post!.author.avatar!}
+				content={data.post!.content}
+				date={data.post!.date}
 				href={$page.url.href}
 				index="0"
-				picture={data.post?.picture!}
-				userId={data.post?.author.id!}
-				username={data.post?.author.name!}
+				picture={data.post!.picture!}
+				userId={data.post!.author.id}
+				username={data.post!.author.name}
 			/>
 		</article>
 		<form method="POST" use:enhance class="flex gap-1">

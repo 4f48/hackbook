@@ -1,25 +1,28 @@
+import { COOKIE_NAME, verifySession } from '$lib/server/session';
 import { db } from '$lib/server/db';
-import { and, desc, eq } from 'drizzle-orm';
-import type { PageServerLoad } from './$types';
-import { error } from '@sveltejs/kit';
 import { follows, posts, users } from '$lib/server/db/schema';
+import type { PageServerLoad } from './$types';
+import { and, desc, eq } from 'drizzle-orm';
+import { error } from '@sveltejs/kit';
 import type { Actions } from '@sveltejs/kit';
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ cookies, locals, request }) => {
+		if (!(await verifySession(cookies.get(COOKIE_NAME)))) return error(401, 'Not authenticated!');
 		const url = request.url.split('/');
 
 		const followed = url[url.length - 1];
 		const follower = locals.uuid;
 
-		if (followed == follower) return { error: 'users cannot be the same' };
+		if (followed == follower) return { error: 'Cannot follow yourself!' };
 
 		const [followerExists, followedExists] = await Promise.all([
 			db.select().from(users).where(eq(users.id, follower)).execute(),
 			db.select().from(users).where(eq(users.id, followed)).execute()
 		]);
 
-		if (!followerExists || !followedExists) return { error: 'user does not exist' };
+		if (!followerExists || !followedExists)
+			return { error: 'Either one of the users does not exist!' };
 
 		const followExists = await db.query.follows.findFirst({
 			where: and(eq(follows.followerId, follower), eq(follows.followedId, followed))
@@ -38,7 +41,8 @@ export const actions = {
 	}
 } satisfies Actions;
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ cookies, locals, params }) => {
+	if (!(await verifySession(cookies.get(COOKIE_NAME)))) return error(401, 'Not authenticated!');
 	try {
 		const you = locals.uuid;
 		const user = await db.query.users.findFirst({
@@ -65,6 +69,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 		return { user, userPosts, you, followers: followExists ? true : false };
 	} catch {
-		error(404, 'user not found');
+		error(404, 'User not found!');
 	}
 };

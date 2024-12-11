@@ -4,9 +4,12 @@ import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 import { comments, posts } from '$lib/server/db/schema';
 import type { Actions } from '@sveltejs/kit';
+import { COOKIE_NAME, verifySession } from '$lib/server/session';
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ cookies, locals, request }) => {
+		if (!(await verifySession(cookies.get(COOKIE_NAME)))) return error(401, 'Not authenticated!');
+
 		const data = await request.formData();
 		const content = data.get('content');
 
@@ -23,7 +26,8 @@ export const actions = {
 	}
 } satisfies Actions;
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ cookies, params }) => {
+	if (!(await verifySession(cookies.get(COOKIE_NAME)))) return error(401, 'Not authenticated!');
 	try {
 		const post = await db.query.posts.findFirst({
 			with: {

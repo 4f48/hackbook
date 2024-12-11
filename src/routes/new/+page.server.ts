@@ -1,19 +1,22 @@
+import { validatePicture } from '$lib';
 import { db } from '$lib/server/db';
 import { posts } from '$lib/server/db/schema';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { COOKIE_NAME, verifySession } from '$lib/server/session';
+import { type Actions, error, redirect } from '@sveltejs/kit';
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ cookies, locals, request }) => {
+		if (!(await verifySession(cookies.get(COOKIE_NAME)))) return error(401, 'Not authenticated!');
+
 		const data = await request.formData();
 		const content = data.get('content');
 		const picture = data.get('picture');
 
 		if (!content) return { error: 'missing content' };
-		if (content.toString().length > 1500) return { error: 'content too long' };
-		if (picture) {
-			if (!validatePicture(picture.toString())) return { error: 'not a url' };
-			if (picture.toString().length > 200) return { error: 'picture url too long' };
-		}
+		if (content.toString().length > 1500)
+			return { error: 'Contenet is longer than 1500 characters!' };
+		if (picture)
+			if (!validatePicture(picture.toString())) return { error: 'Picture link is invalid!' };
 
 		try {
 			await db.insert(posts).values({
@@ -22,19 +25,9 @@ export const actions = {
 				picture: picture?.toString()
 			});
 		} catch {
-			return { error: 'something went wrong' };
+			return { error: 'Failed to create post!' };
 		}
 
-		redirect(303, '/feed');
+		redirect(303, `/user/${locals.uuid}`);
 	}
 } satisfies Actions;
-
-function validatePicture(link: string): boolean {
-	try {
-		new URL(link);
-	} catch {
-		return false;
-	}
-
-	return true;
-}
