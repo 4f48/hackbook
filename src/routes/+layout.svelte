@@ -12,7 +12,7 @@
 	class="sticky top-0 flex w-full justify-center bg-orange-100 bg-opacity-10 px-5 py-1 backdrop-blur-sm backdrop-filter"
 >
 	<nav class="flex flex-1 items-center gap-3">
-		<a class="text-orange-500 no-underline hover:underline" href="/"
+		<a class="text-orange-500 no-underline hover:underline" href="/feed"
 			><h1 class="text-xl font-bold text-orange-500">Hackbook</h1></a
 		>
 		<span class="select-none text-orange-500">&#183;</span>
