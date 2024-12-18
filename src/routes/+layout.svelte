@@ -4,6 +4,7 @@
 	import Input from '$lib/Input.svelte';
 	import type { Snippet } from 'svelte';
 	import Button from '$lib/Button.svelte';
+	import { enhance } from "$app/forms";
 
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
@@ -38,7 +39,7 @@
 	{#if data.uuid}
 		<div class="flex w-[30%] gap-2">
 			<a class="flex-[2]" href="/new"><Button>New post...</Button></a>
-			<form method="POST" action="/search" class="w-[30%] flex-[8]">
+			<form method="POST" action="/search" class="w-[30%] flex-[8]" use:enhance>
 				<Input placeholder="Search hackers..." name="search" required />
 			</form>
 		</div>
