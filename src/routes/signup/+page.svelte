@@ -25,7 +25,7 @@
 		<Button type="submit">Sign in</Button>
 		<p class="text-center text-sm text-orange-400">
 			Already have an account? <a href="/" class="text-blue-400 underline hover:text-blue-500"
-				>Sign in</a
+				>Sign up</a
 			>
 		</p>
 		{#if form?.error}
