@@ -22,4 +22,6 @@
 	});
 </script>
 
-<div class="fixed z-10 h-1 bg-orange-500" style="width: {progress.current}%"></div>
+<div class="w-full bg-orange-100 bg-opacity-10 backdrop-blur-sm backdrop-filter">
+	<div class="z-10 h-1 bg-orange-500" style="width: {progress.current}%"></div>
+</div>

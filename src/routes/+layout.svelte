@@ -4,7 +4,7 @@
 	import Input from '$lib/Input.svelte';
 	import type { Snippet } from 'svelte';
 	import Button from '$lib/Button.svelte';
-	import { enhance } from "$app/forms";
+	import { enhance } from '$app/forms';
 
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
