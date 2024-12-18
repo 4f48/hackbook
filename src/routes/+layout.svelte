@@ -6,7 +6,9 @@
 	import Button from '$lib/Button.svelte';
 
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	injectAnalytics();
+	injectSpeedInsights();
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 </script>
