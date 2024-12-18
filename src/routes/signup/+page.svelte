@@ -22,10 +22,10 @@
 		<label for="name" class="text-orange-500">Password</label>
 		<Input id="password" name="password" type="password" required minlength="8" />
 
-		<Button type="submit">Sign in</Button>
+		<Button type="submit">Sign up</Button>
 		<p class="text-center text-sm text-orange-400">
 			Already have an account? <a href="/" class="text-blue-400 underline hover:text-blue-500"
-				>Sign up</a
+				>Sign in</a
 			>
 		</p>
 		{#if form?.error}
