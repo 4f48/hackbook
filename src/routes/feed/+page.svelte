@@ -9,8 +9,9 @@
 </script>
 
 <div class="flex w-full justify-center">
-	<main class="flex w-[50%] w-full flex-col items-center justify-center gap-3">
+	<main class="flex w-full flex-col items-center justify-center gap-3">
 		{#if data.results.length > 0}
+			<div class="mx-5 lg:w-[50%] items-center gap-3 flex-col flex last:mb-3">
 			{#each data.results as post, index}
 				<Post
 					avatar={post.author.avatar as string | undefined}
@@ -24,6 +25,7 @@
 					username={post.author.name}
 				/>
 			{/each}
+			</div>
 		{:else}
 			<div class="flex h-[90vh] w-full items-center justify-center">
 				<form

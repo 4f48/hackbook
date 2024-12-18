@@ -17,8 +17,12 @@
 
 <Loader />
 
+<svelte:head>
+	<title>Hackbook</title>
+</svelte:head>
+
 <header
-	class="sticky top-0 flex w-full justify-center bg-orange-100 bg-opacity-10 px-5 py-1 backdrop-blur-sm backdrop-filter"
+	class="sticky top-0 flex w-full justify-center bg-orange-100 bg-opacity-10 px-5 py-2 backdrop-blur-sm backdrop-filter"
 >
 	<nav class="flex flex-1 items-center gap-3">
 		<a class="text-orange-500 no-underline hover:underline" href="/feed"
