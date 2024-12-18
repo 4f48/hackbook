@@ -10,8 +10,11 @@
 	injectAnalytics();
 	injectSpeedInsights();
 
+	import Loader from '$lib/Loader.svelte';
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 </script>
+
+<Loader />
 
 <header
 	class="sticky top-0 flex w-full justify-center bg-orange-100 bg-opacity-10 px-5 py-1 backdrop-blur-sm backdrop-filter"

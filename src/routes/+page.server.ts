@@ -46,3 +46,9 @@ export const actions = {
 		redirect(303, '/feed');
 	}
 } satisfies Actions;
+
+export async function load() {
+	return new Promise((fulfil) => {
+		setTimeout(fulfil, 3000);
+	});
+}
