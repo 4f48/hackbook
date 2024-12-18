@@ -22,4 +22,4 @@
 	});
 </script>
 
-<div class="z-10 h-1 bg-orange-500 fixed top-0" style="width: {progress.current}%"></div>
+<div class="fixed top-0 z-10 h-1 bg-orange-500" style="width: {progress.current}%"></div>
