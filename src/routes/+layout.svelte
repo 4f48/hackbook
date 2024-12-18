@@ -5,6 +5,9 @@
 	import type { Snippet } from 'svelte';
 	import Button from '$lib/Button.svelte';
 
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	injectAnalytics();
+
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 </script>
 
