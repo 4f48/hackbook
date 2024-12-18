@@ -46,9 +46,3 @@ export const actions = {
 		redirect(303, '/?post_signup');
 	}
 } satisfies Actions;
-
-export async function load() {
-	return new Promise((fulfil) => {
-		setTimeout(fulfil, 3000);
-	});
-}
