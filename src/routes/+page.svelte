@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ActionData } from './$types';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { enhance } from '$app/forms';
 	let { form }: { form: ActionData } = $props();
@@ -11,16 +11,16 @@
 	import Button from '$lib/Button.svelte';
 	import Input from '$lib/Input.svelte';
 
-	const postSignup = $page.url.searchParams.has('post_signup');
-	const unauthenticated = $page.url.searchParams.has('unauthenticated');
-	const loggedOut = $page.url.searchParams.has('logged_out');
+	const postSignup = page.url.searchParams.has('post_signup');
+	const unauthenticated = page.url.searchParams.has('unauthenticated');
+	const loggedOut = page.url.searchParams.has('logged_out');
 
 	let visible = $state(false);
 	let progress = tweened(100);
 
 	if (postSignup || unauthenticated || loggedOut) {
 		onMount(() => {
-			const params = new URLSearchParams($page.url.searchParams);
+			const params = new URLSearchParams(page.url.searchParams);
 			if (postSignup) params.delete('post_signup');
 			if (unauthenticated) params.delete('unauthenticated');
 			if (loggedOut) params.delete('logged_out');
@@ -65,7 +65,7 @@
 {#if visible}
 	<div
 		transition:fade={{ duration: 300 }}
-		class="fixed bottom-3 right-3 overflow-hidden border border-black p-3"
+		class="fixed bottom-3 right-3 overflow-hidden rounded-md border border-orange-300 p-3 text-orange-600"
 	>
 		{#if postSignup}
 			Successfully signed up. You can log in now.
@@ -76,6 +76,6 @@
 		{#if loggedOut}
 			Successfully logged out.
 		{/if}
-		<div class="absolute bottom-0 left-0 h-1 bg-black" style="width: {$progress}%"></div>
+		<div class="absolute bottom-0 left-0 h-1 bg-orange-300" style="width: {$progress}%"></div>
 	</div>
 {/if}
