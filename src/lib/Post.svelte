@@ -2,20 +2,22 @@
 	import { goto } from '$app/navigation';
 	import { formatDistanceToNow } from 'date-fns';
 	import Avatar from '$lib/Avatar.svelte';
-	// import Like from '$lib/icons/Like.svelte';
-	// import Dislike from '$lib/icons/Dislike.svelte';
+	import Like from '$lib/icons/Like.svelte';
+	import Liked from '$lib/icons/Liked.svelte';
 
 	interface Props {
 		avatar?: string;
 		clickable?: string;
 		content: string;
+		currentUser?: string;
 		date: Date;
 		href: string;
 		image?: 'clickable' | 'static';
 		index: string;
-		// interacted?: 'liked' | 'disliked';
-		// likes: string;
+		liked?: boolean;
+		likes?: string;
 		picture?: string;
+		postId?: string;
 		userId: string;
 		username: string;
 	}
@@ -24,13 +26,15 @@
 		avatar,
 		clickable,
 		content,
+		currentUser,
 		date,
 		href,
 		image,
 		index,
-		// interacted,
-		// likes,
+		liked,
+		likes,
 		picture,
+		postId,
 		userId,
 		username
 	}: Props = $props();
@@ -38,6 +42,25 @@
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key == 'Enter' || event.key == ' ') {
 			goto(href);
+		}
+	}
+
+	let likedLocal = $state(liked);
+	let likesLocal = $state(likes);
+
+	async function handleClick() {
+		const response = await fetch('/api/like', {
+			method: 'POST',
+			body: JSON.stringify({ postId, userId: currentUser })
+		});
+		if (response.status == 200) {
+			if (likedLocal) {
+				likedLocal = false;
+				likesLocal = (parseInt(likesLocal!) - 1).toString();
+			} else {
+				likedLocal = true;
+				likesLocal = (parseInt(likesLocal!) + 1).toString();
+			}
 		}
 	}
 </script>
@@ -69,7 +92,7 @@
 						dateStyle: 'long',
 						timeStyle: 'short'
 					})}"
-					class="cursor-help text-sm text-gray-500"
+					class="curs%d : %nor-help text-sm text-gray-500"
 				>
 					{formatDistanceToNow(new Date(date), { addSuffix: true })}
 				</p>
@@ -90,17 +113,24 @@
 					<img class="mt-3 rounded-md border border-orange-300" src={picture} alt="post pic" />
 				{/if}
 			{/if}
-			<!--
-			<div class="flex gap-1">
-				<form method="POST" action="?/like">
-					<button type="submit"><Like color="rgb(249 115 22)" height="24px" /></button>
-				</form>
-				<form method="POST" action="?/dislike">
-					<button type="submit"><Dislike color="rgb(249 115 22)" height="24px" /></button>
-				</form>
-				<p>{likes}</p>
-			</div>
-			-->
+			{#if !clickable && postId}
+				<div class="mt-2 flex items-center gap-1">
+					<button
+						onclick={(event) => {
+							event.preventDefault();
+							handleClick();
+						}}
+						aria-label="like"
+					>
+						{#if likedLocal == true}
+							<Liked color="rgb(249 115 22)" height="24px" />
+						{:else}
+							<Like color="rgb(249 115 22)" height="24px" />
+						{/if}
+					</button>
+					<p>{likesLocal}</p>
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>

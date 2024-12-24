@@ -10,17 +10,20 @@
 
 <div class="flex w-full justify-center">
 	<main class="flex w-full flex-col items-center justify-center gap-3">
-		{#if data.results.length > 0}
+		{#if data.posts.length > 0}
 			<div class="mx-5 flex flex-col items-center gap-3 last:mb-3 lg:w-[50%]">
-				{#each data.results as post, index}
+				{#each data.posts as post, index}
 					<Post
-						avatar={post.author.avatar as string | undefined}
+						avatar={post.author.avatar!}
 						clickable="true"
-						content={post.post.content}
-						date={post.post.date}
-						href={`/post/${post.post.id}`}
+						content={post.content}
+						date={post.date}
+						href={`/post/${post.id}`}
 						index={index.toString()}
-						picture={post.post.picture as string | undefined}
+						liked={post.isLiked}
+						likes={post.likesCount.toString()}
+						picture={post.picture!}
+						postId={post.id}
 						userId={post.author.id}
 						username={post.author.name}
 					/>

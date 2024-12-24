@@ -49,6 +49,33 @@ export const followsRelations = relations(follows, ({ one }) => ({
 	})
 }));
 
+export const likes = pgTable(
+	'likes',
+	{
+		userId: uuid('userId')
+			.notNull()
+			.references(() => users.id),
+		postId: uuid('postId')
+			.notNull()
+			.references(() => posts.id),
+		date: timestamp('date').notNull().defaultNow()
+	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.postId, table.userId] })
+	})
+);
+
+export const likesRelations = relations(likes, ({ one }) => ({
+	user: one(users, {
+		fields: [likes.userId],
+		references: [users.id]
+	}),
+	post: one(posts, {
+		fields: [likes.postId],
+		references: [posts.id]
+	})
+}));
+
 export const posts = pgTable('posts', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	author: uuid('author').notNull(),
@@ -57,11 +84,12 @@ export const posts = pgTable('posts', {
 	date: timestamp('date').notNull().defaultNow()
 });
 
-export const postsRelations = relations(posts, ({ one }) => ({
+export const postsRelations = relations(posts, ({ one, many }) => ({
 	author: one(users, {
 		fields: [posts.author],
 		references: [users.id]
-	})
+	}),
+	likes: many(likes)
 }));
 
 export const users = pgTable('users', {
@@ -74,5 +102,6 @@ export const users = pgTable('users', {
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
-	follows: many(follows)
+	follows: many(follows),
+	likes: many(likes)
 }));

@@ -1,8 +1,8 @@
 import { db } from '$lib/server/db';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import { comments, posts } from '$lib/server/db/schema';
+import { comments, likes, posts, users } from '$lib/server/db/schema';
 import type { Actions } from '@sveltejs/kit';
 import { COOKIE_NAME, verifySession } from '$lib/server/session';
 
@@ -26,21 +26,33 @@ export const actions = {
 	}
 } satisfies Actions;
 
-export const load: PageServerLoad = async ({ cookies, params }) => {
+export const load: PageServerLoad = async ({ cookies, locals, params }) => {
 	if (!(await verifySession(cookies.get(COOKIE_NAME)))) return error(401, 'Not authenticated!');
 	try {
-		const post = await db.query.posts.findFirst({
-			with: {
+		const result = await db
+			.select({
+				post: {
+					id: posts.id,
+					content: posts.content,
+					picture: posts.picture,
+					date: posts.date
+				},
 				author: {
-					columns: {
-						avatar: true,
-						id: true,
-						name: true
-					}
-				}
-			},
-			where: eq(posts.id, params.slug)
-		});
+					id: users.id,
+					name: users.name,
+					avatar: users.avatar
+				},
+				likesCount: sql<number>`COALESCE(count(distinct ${likes.userId}), 0)`.as('likes_count'),
+				isLiked:
+					sql<boolean>`EXISTS(SELECT 1 FROM ${likes} WHERE ${likes.postId} = ${posts.id} AND ${likes.userId} = ${locals.uuid})`.as(
+						'is_liked'
+					)
+			})
+			.from(posts)
+			.innerJoin(users, eq(posts.author, users.id))
+			.leftJoin(likes, eq(posts.id, likes.postId))
+			.where(eq(posts.id, params.slug))
+			.groupBy(posts.id, users.id);
 
 		const postComments = await db.query.comments.findMany({
 			columns: {
@@ -60,8 +72,19 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 			}
 		});
 
-		return { post, postComments };
-	} catch {
-		error(404, 'post not found');
+		const post = result[0];
+
+		return {
+			post: {
+				...post.post,
+				author: post.author,
+				likesCount: post.likesCount,
+				isLiked: post.isLiked
+			},
+			comments: postComments,
+			currentUser: locals.uuid
+		};
+	} catch (err) {
+		error(404, 'post not found: ' + err);
 	}
 };
