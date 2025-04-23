@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - '@vercel/speed-insights'
+  - argon2
+  - esbuild
